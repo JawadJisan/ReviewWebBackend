@@ -39,10 +39,6 @@ router.post(
   AvailableServiceController.insertIntoDB
 );
 
-router.get(
-  '/',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  AvailableServiceController.getAllFromDB
-);
+router.get('/', AvailableServiceController.getAllFromDB);
 
 export const availableServiceRoutes = router;

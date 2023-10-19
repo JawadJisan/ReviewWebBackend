@@ -22,7 +22,7 @@ const ApiError_1 = __importDefault(require("./errors/ApiError"));
 const app = (0, express_1.default)();
 // app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use((0, cors_1.default)({
-    origin: 'https://excellence-builders-backend.vercel.app',
+    origin: 'https://excellence-builders-frontend.vercel.app',
     credentials: true,
 }));
 //parser

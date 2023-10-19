@@ -7,7 +7,14 @@ import routes from './app/routes';
 import ApiError from './errors/ApiError';
 const app: Application = express();
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(
+  cors({
+    origin:
+      'https://excellence-builders-backend-m7hc5m419-jawadjisan.vercel.app',
+    credentials: true,
+  })
+);
 
 //parser
 app.use(express.json());

@@ -18,5 +18,5 @@ router.get('/:categoryId/category', availableService_controller_1.AvailableServi
 router.delete('/:id', (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.SUPER_ADMIN), availableService_controller_1.AvailableServiceController.deleteDataById);
 router.patch('/:id', (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.SUPER_ADMIN), (0, validateRequest_1.validateRequest)(availableService_validation_1.validationSchema.update), availableService_controller_1.AvailableServiceController.updateDataById);
 router.post('/', (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.SUPER_ADMIN), (0, validateRequest_1.validateRequest)(availableService_validation_1.validationSchema.create), availableService_controller_1.AvailableServiceController.insertIntoDB);
-router.get('/', (0, auth_1.default)(user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.SUPER_ADMIN), availableService_controller_1.AvailableServiceController.getAllFromDB);
+router.get('/', availableService_controller_1.AvailableServiceController.getAllFromDB);
 exports.availableServiceRoutes = router;

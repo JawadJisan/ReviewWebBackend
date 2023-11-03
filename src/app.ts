@@ -41,6 +41,7 @@ app.get('*', (req: Request, res: Response, next: NextFunction) => {
 });
 
 // global error handaler
+// global error handaler
 app.use(globalErrorHandler);
 
 export default app;

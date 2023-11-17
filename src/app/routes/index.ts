@@ -20,6 +20,7 @@ import { authRoutes } from '../modules/users/auth.routes';
 import { profileRoutes } from '../modules/users/profile.routes';
 import { userRoutes } from '../modules/users/users.routes';
 import { websiteContentRoutes } from '../modules/websiteContent/websiteContent.routes';
+import { paymentRoutes } from '../modules/payment/payment.routes';
 const router = express.Router();
 
 const moduleRoutes = [
@@ -66,6 +67,10 @@ const moduleRoutes = [
   {
     path: '/review-and-rating',
     route: reviewAndRatingRoutes,
+  },
+  {
+    path: '/payment',
+    route: paymentRoutes,
   },
   {
     path: '/blog',

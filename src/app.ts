@@ -7,13 +7,14 @@ import routes from './app/routes';
 import ApiError from './errors/ApiError';
 const app: Application = express();
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-// app.use(
-//   cors({
-//     origin: 'https://excellence-builders-frontend.vercel.app',
-//     credentials: true,
-//   })
-// );
+// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(
+  cors({
+    origin: 'https://excellence-builders-frontend.vercel.app',
+    // origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
 //parser
 app.use(express.json());

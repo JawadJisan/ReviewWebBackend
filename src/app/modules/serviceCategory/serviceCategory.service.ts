@@ -38,9 +38,6 @@ const getAllFromDB = async (
     skip,
     take: limit,
     orderBy: orderCondition,
-    include: {
-      // services: {},
-    },
   });
 
   const total = await prisma.reviewCategory.count();

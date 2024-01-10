@@ -1,4 +1,4 @@
-import { Prisma, Users, newUserModel } from '@prisma/client';
+import { Prisma, newUserModel } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
 import { JwtPayload, Secret } from 'jsonwebtoken';
@@ -14,10 +14,8 @@ import { orderByConditions } from '../../../shared/orderCondition';
 import prisma from '../../../shared/prisma';
 import { userSearchableFields } from './users.constant';
 import {
-  IRefreshTokenResponse,
   ISigninUserResponse,
   ISigninUserReview,
-  IUserData,
   IUserFilterRequest,
   InewUserModel,
 } from './users.interface';
@@ -33,41 +31,62 @@ fullName        String?
 */
 
 const insertIntoDB = async (data: newUserModel): Promise<InewUserModel> => {
+  /* 
+  
+  id             String          @id @default(uuid())
+  createdAt      DateTime        @default(now()) @map("createdAt")
+  updatedAt      DateTime        @updatedAt @map("updatedAt")
+  firstName      String?
+  lastName       String?
+  email          String          @unique
+  userName       String          @unique
+  password       String
+  facebook       String?
+  twitter        String?
+  linkedIn       String?
+  other          String?
+  imageUrl       String?
+  address        String?
+  role           reviewUserRole  @default(user)
+  Review         Review[]
+  Comment        Comment[]
+  ContactDetails ContactDetails?
+  */
   const {
-    fullName,
     email,
     password,
     role,
     address,
     userName,
-    profileImageUrl,
+    firstName,
+    lastName,
+    facebook,
+    twitter,
+    linkedIn,
+    other,
+    imageUrl,
   } = data;
   const hashedPassword = await bcrypt.hash(
     password,
     Number(config.bcrypt_salt_rounds)
   );
   const newData = {
-    fullName,
     userName,
     email,
     password: hashedPassword,
     address,
-    profileImageUrl,
+    firstName,
+    lastName,
     role,
+    facebook,
+    twitter,
+    linkedIn,
+    other,
+    imageUrl,
   };
-  // const result = await prisma.users.create({ data: newData });
   const result = await prisma.newUserModel.create({ data: newData });
-  const newResultData = {
-    id: result.id,
-    fullName: result.fullName,
-    userName: result.userName,
-    email: result.email,
-    role: result.role,
-    address: result.address,
-    profileImageUrl: result.profileImageUrl,
-  };
 
-  return newResultData;
+  return result;
 };
 
 const loginUser = async (
@@ -159,7 +178,9 @@ const getAllFromDB = async (
   };
 };
 
-const getDataById = async (id: string): Promise<Partial<Users> | null> => {
+const getDataById = async (
+  id: string
+): Promise<Partial<newUserModel> | null> => {
   const result = await prisma.newUserModel.findUnique({
     where: {
       id,
@@ -223,16 +244,6 @@ const deleteDataById = async (id: string): Promise<Partial<newUserModel>> => {
     where: {
       id,
     },
-    select: {
-      id: true,
-      fullName: true,
-      email: true,
-      role: true,
-      address: true,
-      profileImageUrl: true,
-      createdAt: true,
-      updatedAt: true,
-    },
   });
 
   return result;
@@ -240,7 +251,7 @@ const deleteDataById = async (id: string): Promise<Partial<newUserModel>> => {
 
 const getProfileData = async (
   verifiedUser: JwtPayload
-): Promise<Users | null> => {
+): Promise<newUserModel | null> => {
   const user = await prisma.newUserModel.findUnique({
     where: { id: verifiedUser.userId },
   });
@@ -252,88 +263,6 @@ const getProfileData = async (
   return user;
 };
 
-const updateProfileDataById = async (
-  verifiedUser: JwtPayload,
-  payload: Partial<Users>
-): Promise<IUserData> => {
-  const existingUser = await prisma.users.findUnique({
-    where: { id: verifiedUser.userId },
-  });
-
-  if (!existingUser) {
-    throw new ApiError('User does not exist', httpStatus.NOT_FOUND);
-  }
-
-  if (
-    payload.role === 'admin' ||
-    payload.role === 'super_admin' ||
-    payload.role === 'customer' ||
-    payload.role === 'team_member'
-  ) {
-    throw new ApiError('You can not change role', httpStatus.NOT_FOUND);
-  }
-
-  const result = await prisma.users.update({
-    where: {
-      id: verifiedUser.userId,
-    },
-    data: {
-      ...payload,
-      password: payload.password
-        ? await bcrypt.hash(payload.password, Number(config.bcrypt_salt_rounds))
-        : undefined,
-    },
-    select: {
-      id: true,
-      fullName: true,
-      email: true,
-      role: true,
-      contactNumber: true,
-      address: true,
-      profileImageUrl: true,
-      gender: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
-
-  return result;
-};
-
-const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
-  //verify token
-  // invalid token - synchronous
-  let verifiedToken = null;
-  try {
-    verifiedToken = jwtHelpers.verifyToken(
-      token,
-      config.jwt.refresh_secret as Secret
-    );
-  } catch (err) {
-    throw new ApiError('Invalid Refresh Token', httpStatus.FORBIDDEN);
-  }
-
-  const { userId } = verifiedToken;
-
-  const user = await prisma.users.findUnique({
-    where: { id: userId },
-  });
-
-  if (!user) {
-    throw new ApiError('User does not exist', httpStatus.NOT_FOUND);
-  }
-  const { id, role, email: userEmail } = user;
-  const accessToken = jwtHelpers.createToken(
-    { userId: id, role, userEmail },
-    config.jwt.secret as Secret,
-    config.jwt.expires_in as string
-  );
-
-  return {
-    accessToken: accessToken,
-  };
-};
-
 export const UsersServices = {
   insertIntoDB,
   loginUser,
@@ -342,6 +271,4 @@ export const UsersServices = {
   updateDataById,
   deleteDataById,
   getProfileData,
-  refreshToken,
-  updateProfileDataById,
 };

@@ -8,20 +8,6 @@ const AddReview = async (
   verifiedUser: JwtPayload,
   data: Review
 ): Promise<Review> => {
-  // const booking = await prisma.booking.findFirst({
-  //   where: {
-  //     userId: verifiedUser.userId,
-  //     serviceId: data.serviceId,
-  //   },
-  // });
-  // if (booking && booking.status === 'confirmed') {
-  //   return result;
-  // } else {
-  //   throw new ApiError(
-  //     `You must have a confirmed booking for this service to add a review`,
-  //     httpStatus.NOT_FOUND
-  //   );
-  // }
   const result = await prisma.review.create({
     data,
     include: {
@@ -29,36 +15,9 @@ const AddReview = async (
       product: true,
     },
   });
+
   return result;
 };
-
-// const insertIntoDB = async (
-//   verifiedUser: JwtPayload,
-//   data: ReviewAndRating
-// ): Promise<ReviewAndRating> => {
-//   const booking = await prisma.booking.findFirst({
-//     where: {
-//       userId: verifiedUser.userId,
-//       serviceId: data.serviceId,
-//     },
-//   });
-
-//   if (booking && booking.status === 'confirmed') {
-//     const result = await prisma.reviewAndRating.create({
-//       data,
-//       include: {
-//         user: true,
-//         service: true,
-//       },
-//     });
-//     return result;
-//   } else {
-//     throw new ApiError(
-//       `You must have a confirmed booking for this service to add a review`,
-//       httpStatus.NOT_FOUND
-//     );
-//   }
-// };
 
 const getAllFromDB = async () => {
   const result = await prisma.review.findMany({

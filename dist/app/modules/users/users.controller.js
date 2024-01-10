@@ -64,23 +64,6 @@ const signinUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: others,
     });
 }));
-const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { refreshToken } = req.cookies;
-    const result = yield users_service_1.UsersServices.refreshToken(refreshToken);
-    // set refresh token into cookie
-    // const cookieOptions = {
-    //   secure: config.env === 'production' ? true : false,
-    //   httpOnly: true,
-    // };
-    // res.cookie('refreshToken', refreshToken, cookieOptions);
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_1.default.OK,
-        success: true,
-        status: 'success',
-        message: 'Token refreshed successfully',
-        data: result,
-    });
-}));
 exports.getAllFromDB = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const filters = (0, pick_1.default)(req.query, users_constant_1.userFilterableFields);
     const paginationOptions = (0, pick_1.default)(req.query, paginationFields_1.paginationFields);
@@ -137,26 +120,12 @@ const deleteDataById = (0, catchAsync_1.default)((req, res, next) => __awaiter(v
 const getProfileData = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization;
     const verifiedUser = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
-    console.log(verifiedUser, 'verifiedUser');
     const result = yield users_service_1.UsersServices.getProfileData(verifiedUser);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         status: 'success',
         message: 'Profile retrived successfully',
-        data: result,
-    });
-}));
-const updateProfileDataById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers.authorization;
-    const verifiedUser = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
-    const payload = req.body;
-    const result = yield users_service_1.UsersServices.updateProfileDataById(verifiedUser, payload);
-    (0, sendResponse_1.default)(res, {
-        statusCode: http_status_1.default.OK,
-        success: true,
-        status: 'success',
-        message: 'Profile updated successfully',
         data: result,
     });
 }));
@@ -168,6 +137,4 @@ exports.UserController = {
     updateDataById,
     deleteDataById,
     getProfileData,
-    refreshToken,
-    updateProfileDataById,
 };

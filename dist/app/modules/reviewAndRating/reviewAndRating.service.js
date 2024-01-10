@@ -14,16 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReviewAndRatingServices = void 0;
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
-const AddReview = (verifiedUser, data) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.review.create({
-        data,
-        include: {
-            author: true,
-            product: true,
-        },
-    });
-    return result;
-});
+// const AddReview = async (data: Review): Promise<Review> => {
+//   const result = await prisma.review.create({
+//     data,
+//     include: {
+//       author: true,
+//       product: true,
+//     },
+//   });
+//   return result;
+// };
 const getAllFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.review.findMany({
         include: {
@@ -39,47 +39,7 @@ const getAllFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
         data: result,
     };
 });
-// const getDataById = async (id: string): Promise<ReviewAndRating | null> => {
-//   const result = await prisma.reviewAndRating.findUnique({
-//     where: {
-//       id,
-//     },
-//     include: {
-//       user: true,
-//       service: true,
-//     },
-//   });
-//   return result;
-// };
-// const updateDataById = async (
-//   id: string,
-//   payload: Partial<ReviewAndRating>
-// ): Promise<ReviewAndRating> => {
-//   const result = await prisma.reviewAndRating.update({
-//     where: {
-//       id,
-//     },
-//     data: payload,
-//     include: {
-//       user: true,
-//       service: true,
-//     },
-//   });
-//   return result;
-// };
-// const deleteDataById = async (id: string): Promise<ReviewAndRating> => {
-//   const result = await prisma.reviewAndRating.delete({
-//     where: {
-//       id,
-//     },
-//     include: {
-//       user: true,
-//       service: true,
-//     },
-//   });
-//   return result;
-// };
 exports.ReviewAndRatingServices = {
-    AddReview,
+    // AddReview,
     getAllFromDB,
 };

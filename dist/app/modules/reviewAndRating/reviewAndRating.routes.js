@@ -23,13 +23,15 @@ const router = express_1.default.Router();
 //   validateRequest(validationSchema.update),
 //   ReviewAndRatingController.updateDataById
 // );
-router.post('/', 
-// auth(
-//   ENUM_USER_ROLE.ADMIN,
-//   ENUM_USER_ROLE.SUPER_ADMIN,
-//   ENUM_USER_ROLE.CUSTOMER
-// ),
-// validateRequest(validationSchema.create),
-reviewAndRating_controller_1.ReviewAndRatingController.AddReview);
+// router.post(
+//   '/',
+//   // auth(
+//   //   ENUM_USER_ROLE.ADMIN,
+//   //   ENUM_USER_ROLE.SUPER_ADMIN,
+//   //   ENUM_USER_ROLE.CUSTOMER
+//   // ),
+//   // validateRequest(validationSchema.create),
+//   ReviewAndRatingController.AddReview
+// );
 router.get('/', reviewAndRating_controller_1.ReviewAndRatingController.getAllFromDB);
 exports.reviewAndRatingRoutes = router;

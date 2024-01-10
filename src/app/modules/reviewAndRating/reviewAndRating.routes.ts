@@ -22,16 +22,16 @@ const router = express.Router();
 //   ReviewAndRatingController.updateDataById
 // );
 
-router.post(
-  '/',
-  // auth(
-  //   ENUM_USER_ROLE.ADMIN,
-  //   ENUM_USER_ROLE.SUPER_ADMIN,
-  //   ENUM_USER_ROLE.CUSTOMER
-  // ),
-  // validateRequest(validationSchema.create),
-  ReviewAndRatingController.AddReview
-);
+// router.post(
+//   '/',
+//   // auth(
+//   //   ENUM_USER_ROLE.ADMIN,
+//   //   ENUM_USER_ROLE.SUPER_ADMIN,
+//   //   ENUM_USER_ROLE.CUSTOMER
+//   // ),
+//   // validateRequest(validationSchema.create),
+//   ReviewAndRatingController.AddReview
+// );
 
 router.get('/', ReviewAndRatingController.getAllFromDB);
 

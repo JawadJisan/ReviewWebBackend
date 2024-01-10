@@ -47,26 +47,6 @@ const signinUser: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
-const refreshToken: RequestHandler = catchAsync(async (req, res) => {
-  const { refreshToken } = req.cookies;
-  const result = await UsersServices.refreshToken(refreshToken);
-
-  // set refresh token into cookie
-  // const cookieOptions = {
-  //   secure: config.env === 'production' ? true : false,
-  //   httpOnly: true,
-  // };
-  // res.cookie('refreshToken', refreshToken, cookieOptions);
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    status: 'success',
-    message: 'Token refreshed successfully',
-    data: result,
-  });
-});
-
 export const getAllFromDB: RequestHandler = catchAsync(
   async (req, res, next) => {
     const filters = pick(req.query, userFilterableFields);
@@ -145,8 +125,6 @@ const getProfileData: RequestHandler = catchAsync(async (req, res) => {
     config.jwt.secret as string
   );
 
-  console.log(verifiedUser, 'verifiedUser');
-
   const result = await UsersServices.getProfileData(verifiedUser);
 
   sendResponse(res, {
@@ -154,29 +132,6 @@ const getProfileData: RequestHandler = catchAsync(async (req, res) => {
     success: true,
     status: 'success',
     message: 'Profile retrived successfully',
-    data: result,
-  });
-});
-
-const updateProfileDataById: RequestHandler = catchAsync(async (req, res) => {
-  const token = req.headers.authorization;
-
-  const verifiedUser = jwtHelpers.verifyToken(
-    token as string,
-    config.jwt.secret as string
-  );
-  const payload = req.body;
-
-  const result = await UsersServices.updateProfileDataById(
-    verifiedUser,
-    payload
-  );
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    status: 'success',
-    message: 'Profile updated successfully',
     data: result,
   });
 });
@@ -189,6 +144,4 @@ export const UserController = {
   updateDataById,
   deleteDataById,
   getProfileData,
-  refreshToken,
-  updateProfileDataById,
 };

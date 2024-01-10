@@ -44,29 +44,45 @@ fullName        String?
   role
 */
 const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const { fullName, email, password, role, address, userName, profileImageUrl, } = data;
+    /*
+    
+    id             String          @id @default(uuid())
+    createdAt      DateTime        @default(now()) @map("createdAt")
+    updatedAt      DateTime        @updatedAt @map("updatedAt")
+    firstName      String?
+    lastName       String?
+    email          String          @unique
+    userName       String          @unique
+    password       String
+    facebook       String?
+    twitter        String?
+    linkedIn       String?
+    other          String?
+    imageUrl       String?
+    address        String?
+    role           reviewUserRole  @default(user)
+    Review         Review[]
+    Comment        Comment[]
+    ContactDetails ContactDetails?
+    */
+    const { email, password, role, address, userName, firstName, lastName, facebook, twitter, linkedIn, other, imageUrl, } = data;
     const hashedPassword = yield bcrypt_1.default.hash(password, Number(config_1.default.bcrypt_salt_rounds));
     const newData = {
-        fullName,
         userName,
         email,
         password: hashedPassword,
         address,
-        profileImageUrl,
+        firstName,
+        lastName,
         role,
+        facebook,
+        twitter,
+        linkedIn,
+        other,
+        imageUrl,
     };
-    // const result = await prisma.users.create({ data: newData });
     const result = yield prisma_1.default.newUserModel.create({ data: newData });
-    const newResultData = {
-        id: result.id,
-        fullName: result.fullName,
-        userName: result.userName,
-        email: result.email,
-        role: result.role,
-        address: result.address,
-        profileImageUrl: result.profileImageUrl,
-    };
-    return newResultData;
+    return result;
 });
 const loginUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const { userName, password } = data;
@@ -177,16 +193,6 @@ const deleteDataById = (id) => __awaiter(void 0, void 0, void 0, function* () {
         where: {
             id,
         },
-        select: {
-            id: true,
-            fullName: true,
-            email: true,
-            role: true,
-            address: true,
-            profileImageUrl: true,
-            createdAt: true,
-            updatedAt: true,
-        },
     });
     return result;
 });
@@ -199,64 +205,6 @@ const getProfileData = (verifiedUser) => __awaiter(void 0, void 0, void 0, funct
     }
     return user;
 });
-const updateProfileDataById = (verifiedUser, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const existingUser = yield prisma_1.default.users.findUnique({
-        where: { id: verifiedUser.userId },
-    });
-    if (!existingUser) {
-        throw new ApiError_1.default('User does not exist', http_status_1.default.NOT_FOUND);
-    }
-    if (payload.role === 'admin' ||
-        payload.role === 'super_admin' ||
-        payload.role === 'customer' ||
-        payload.role === 'team_member') {
-        throw new ApiError_1.default('You can not change role', http_status_1.default.NOT_FOUND);
-    }
-    const result = yield prisma_1.default.users.update({
-        where: {
-            id: verifiedUser.userId,
-        },
-        data: Object.assign(Object.assign({}, payload), { password: payload.password
-                ? yield bcrypt_1.default.hash(payload.password, Number(config_1.default.bcrypt_salt_rounds))
-                : undefined }),
-        select: {
-            id: true,
-            fullName: true,
-            email: true,
-            role: true,
-            contactNumber: true,
-            address: true,
-            profileImageUrl: true,
-            gender: true,
-            createdAt: true,
-            updatedAt: true,
-        },
-    });
-    return result;
-});
-const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
-    //verify token
-    // invalid token - synchronous
-    let verifiedToken = null;
-    try {
-        verifiedToken = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.refresh_secret);
-    }
-    catch (err) {
-        throw new ApiError_1.default('Invalid Refresh Token', http_status_1.default.FORBIDDEN);
-    }
-    const { userId } = verifiedToken;
-    const user = yield prisma_1.default.users.findUnique({
-        where: { id: userId },
-    });
-    if (!user) {
-        throw new ApiError_1.default('User does not exist', http_status_1.default.NOT_FOUND);
-    }
-    const { id, role, email: userEmail } = user;
-    const accessToken = jwtHelpers_1.jwtHelpers.createToken({ userId: id, role, userEmail }, config_1.default.jwt.secret, config_1.default.jwt.expires_in);
-    return {
-        accessToken: accessToken,
-    };
-});
 exports.UsersServices = {
     insertIntoDB,
     loginUser,
@@ -265,6 +213,4 @@ exports.UsersServices = {
     updateDataById,
     deleteDataById,
     getProfileData,
-    refreshToken,
-    updateProfileDataById,
 };

@@ -59,59 +59,9 @@ exports.getAllFromDB = (0, catchAsync_1.default)((req, res, next) => __awaiter(v
         success: true,
         status: 'success',
         message: 'Yup! Review retrived successfully',
-        meta: result.meta,
         data: result.data,
     });
 }));
-// const getDataById: RequestHandler = catchAsync(async (req, res, next) => {
-//   const result = await ReviewAndRatingServices.getDataById(req.params.id);
-//   if (!result) {
-//     return next(
-//       new ApiError(`No Review found with this id`, httpStatus.NOT_FOUND)
-//     );
-//   }
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     status: 'success',
-//     message: 'Review retrived successfully',
-//     data: result,
-//   });
-// });
-// const updateDataById: RequestHandler = catchAsync(async (req, res, next) => {
-//   const payload = req.body;
-//   const result = await ReviewAndRatingServices.updateDataById(
-//     req.params.id,
-//     payload
-//   );
-//   if (!result) {
-//     return next(
-//       new ApiError(`No Review found with this id`, httpStatus.NOT_FOUND)
-//     );
-//   }
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     status: 'success',
-//     message: 'Review updated successfully',
-//     data: result,
-//   });
-// });
-// const deleteDataById: RequestHandler = catchAsync(async (req, res, next) => {
-//   const result = await ReviewAndRatingServices.deleteDataById(req.params.id);
-//   if (!result) {
-//     return next(
-//       new ApiError(`No Review found with this id`, httpStatus.NOT_FOUND)
-//     );
-//   }
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     status: 'success',
-//     message: 'Review deleted successfully',
-//     data: result,
-//   });
-// });
 exports.ReviewAndRatingController = {
     getAllFromDB: exports.getAllFromDB,
     AddReview: exports.AddReview,

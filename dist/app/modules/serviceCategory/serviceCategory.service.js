@@ -46,9 +46,6 @@ const getAllFromDB = (filters, options) => __awaiter(void 0, void 0, void 0, fun
         skip,
         take: limit,
         orderBy: orderCondition,
-        include: {
-        // services: {},
-        },
     });
     const total = yield prisma_1.default.reviewCategory.count();
     return {

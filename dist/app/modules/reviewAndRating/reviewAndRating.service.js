@@ -15,20 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReviewAndRatingServices = void 0;
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const AddReview = (verifiedUser, data) => __awaiter(void 0, void 0, void 0, function* () {
-    // const booking = await prisma.booking.findFirst({
-    //   where: {
-    //     userId: verifiedUser.userId,
-    //     serviceId: data.serviceId,
-    //   },
-    // });
-    // if (booking && booking.status === 'confirmed') {
-    //   return result;
-    // } else {
-    //   throw new ApiError(
-    //     `You must have a confirmed booking for this service to add a review`,
-    //     httpStatus.NOT_FOUND
-    //   );
-    // }
     const result = yield prisma_1.default.review.create({
         data,
         include: {
@@ -38,32 +24,6 @@ const AddReview = (verifiedUser, data) => __awaiter(void 0, void 0, void 0, func
     });
     return result;
 });
-// const insertIntoDB = async (
-//   verifiedUser: JwtPayload,
-//   data: ReviewAndRating
-// ): Promise<ReviewAndRating> => {
-//   const booking = await prisma.booking.findFirst({
-//     where: {
-//       userId: verifiedUser.userId,
-//       serviceId: data.serviceId,
-//     },
-//   });
-//   if (booking && booking.status === 'confirmed') {
-//     const result = await prisma.reviewAndRating.create({
-//       data,
-//       include: {
-//         user: true,
-//         service: true,
-//       },
-//     });
-//     return result;
-//   } else {
-//     throw new ApiError(
-//       `You must have a confirmed booking for this service to add a review`,
-//       httpStatus.NOT_FOUND
-//     );
-//   }
-// };
 const getAllFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.review.findMany({
         include: {

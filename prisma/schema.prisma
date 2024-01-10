@@ -32,9 +32,9 @@ model newUserModel {
 
 model Review {
   id          String         @id @default(uuid())
-  title       String
-  description String
-  rating      Float
+  title       String?
+  description String?
+  rating      Float?
   status      ListingStatus  @default(pending)
   author      newUserModel   @relation(fields: [userId], references: [id])
   userId      String
@@ -45,8 +45,6 @@ model Review {
 
   createdAt DateTime @default(now()) @map("createdAt")
   updatedAt DateTime @updatedAt @map("updatedAt")
-  // reviewUsers   reviewUsers? @relation(fields: [reviewUsersId], references: [id])
-  // reviewUsersId String?
 }
 
 model Comment {

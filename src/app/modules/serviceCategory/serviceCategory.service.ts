@@ -1,4 +1,4 @@
-import { Prisma, ServiceCategory } from '@prisma/client';
+import { Prisma, reviewCategory } from '@prisma/client';
 import { calculatePagination } from '../../../helpers/paginationHelper';
 import { IGenericPaginationResponse } from '../../../interfaces/genericPaginationResponse';
 import { IpaginationOptions } from '../../../interfaces/paginationOptions';
@@ -8,10 +8,8 @@ import prisma from '../../../shared/prisma';
 import { serviceCategorySearchableFields } from './serviceCategory.constant';
 import { IServiceCategoryFilters } from './serviceCategory.interface';
 
-const insertIntoDB = async (
-  data: ServiceCategory
-): Promise<ServiceCategory> => {
-  const result = await prisma.serviceCategory.create({
+const insertIntoDB = async (data: reviewCategory): Promise<reviewCategory> => {
+  const result = await prisma.reviewCategory.create({
     data,
   });
   return result;
@@ -20,7 +18,7 @@ const insertIntoDB = async (
 const getAllFromDB = async (
   filters: IServiceCategoryFilters,
   options: IpaginationOptions
-): Promise<IGenericPaginationResponse<ServiceCategory[]>> => {
+): Promise<IGenericPaginationResponse<reviewCategory[]>> => {
   const { page, limit, skip } = calculatePagination(options);
   const { searchTerm, ...filterData } = filters;
 
@@ -30,22 +28,22 @@ const getAllFromDB = async (
     serviceCategorySearchableFields
   );
 
-  const whereConditons: Prisma.ServiceCategoryWhereInput =
+  const whereConditons: Prisma.reviewCategoryWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {};
 
   const orderCondition = orderByConditions(options);
 
-  const result = await prisma.serviceCategory.findMany({
+  const result = await prisma.reviewCategory.findMany({
     where: whereConditons,
     skip,
     take: limit,
     orderBy: orderCondition,
     include: {
-      services: {},
+      // services: {},
     },
   });
 
-  const total = await prisma.serviceCategory.count();
+  const total = await prisma.reviewCategory.count();
 
   return {
     meta: {
@@ -57,13 +55,10 @@ const getAllFromDB = async (
   };
 };
 
-const getDataById = async (id: string): Promise<ServiceCategory | null> => {
-  const result = await prisma.serviceCategory.findUnique({
+const getDataById = async (id: string): Promise<reviewCategory | null> => {
+  const result = await prisma.reviewCategory.findUnique({
     where: {
       id,
-    },
-    include: {
-      services: {},
     },
   });
   return result;
@@ -71,23 +66,20 @@ const getDataById = async (id: string): Promise<ServiceCategory | null> => {
 
 const updateDataById = async (
   id: string,
-  payload: Partial<ServiceCategory>
-): Promise<ServiceCategory> => {
-  const result = await prisma.serviceCategory.update({
+  payload: Partial<reviewCategory>
+): Promise<reviewCategory> => {
+  const result = await prisma.reviewCategory.update({
     where: {
       id,
     },
     data: payload,
-    include: {
-      services: {},
-    },
   });
 
   return result;
 };
 
-const deleteDataById = async (id: string): Promise<ServiceCategory> => {
-  const result = await prisma.serviceCategory.delete({
+const deleteDataById = async (id: string): Promise<reviewCategory> => {
+  const result = await prisma.reviewCategory.delete({
     where: {
       id,
     },
@@ -96,7 +88,7 @@ const deleteDataById = async (id: string): Promise<ServiceCategory> => {
   return result;
 };
 
-export const ServiceCategoryServices = {
+export const reviewCategoryService = {
   insertIntoDB,
   getAllFromDB,
   getDataById,

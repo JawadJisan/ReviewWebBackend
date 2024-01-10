@@ -1,26 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import express from 'express';
-import { availableServiceRoutes } from '../modules/availableService/availableService.routes';
-import { blogPostRoutes } from '../modules/blogPost/blogPost.routes';
-import { bookingRoutes } from '../modules/booking/booking.routes';
-import { faqRoutes } from '../modules/faq/faq.routes';
-import { featuredInRoutes } from '../modules/featuedIn/featuedIn.routes';
-import { feedbackRoutes } from '../modules/feedback/feedback.routes';
-import { notificationRoutes } from '../modules/notification/notification.routes';
+import { ListingProductRoutes } from '../modules/listingProduct/listingProduct.routes';
 import { reviewAndRatingRoutes } from '../modules/reviewAndRating/reviewAndRating.routes';
-import { serviceRoutes } from '../modules/service/service.routes';
-import { serviceCategoryRoutes } from '../modules/serviceCategory/serviceCategory.routes';
-import { serviceTeamRoutes } from '../modules/serviceTeam/serviceTeam.routes';
-import { showcaseWorkRoutes } from '../modules/showcaseWork/showcaseWork.routes';
-import { slotsRoutes } from '../modules/slot/slot.routes';
-import { specializationRoutes } from '../modules/specialization/specialization.routes';
-import { statsRoutes } from '../modules/stats/stats.routes';
-import { teamMemberRoutes } from '../modules/teamMember/teamMember.routes';
-import { upcomingServiceRoutes } from '../modules/upcomingService/upcomingService.routes';
+import { reviewCategoryRoute } from '../modules/serviceCategory/serviceCategory.routes';
 import { authRoutes } from '../modules/users/auth.routes';
 import { profileRoutes } from '../modules/users/profile.routes';
 import { userRoutes } from '../modules/users/users.routes';
-import { websiteContentRoutes } from '../modules/websiteContent/websiteContent.routes';
-import { paymentRoutes } from '../modules/payment/payment.routes';
+
 const router = express.Router();
 
 const moduleRoutes = [
@@ -37,78 +24,86 @@ const moduleRoutes = [
     route: profileRoutes,
   },
   {
-    path: '/specialization',
-    route: specializationRoutes,
+    path: '/reviewCategory',
+    route: reviewCategoryRoute,
   },
   {
-    path: '/service-team',
-    route: serviceTeamRoutes,
+    path: '/listingProduct',
+    route: ListingProductRoutes,
   },
   {
-    path: '/service-category',
-    route: serviceCategoryRoutes,
-  },
-  {
-    path: '/service',
-    route: serviceRoutes,
-  },
-  {
-    path: '/available-service',
-    route: availableServiceRoutes,
-  },
-  {
-    path: '/upcoming-service',
-    route: upcomingServiceRoutes,
-  },
-  {
-    path: '/booking',
-    route: bookingRoutes,
-  },
-  {
-    path: '/review-and-rating',
+    path: '/reviewAndRating',
     route: reviewAndRatingRoutes,
   },
-  {
-    path: '/payment',
-    route: paymentRoutes,
-  },
-  {
-    path: '/blog',
-    route: blogPostRoutes,
-  },
-  {
-    path: '/faq',
-    route: faqRoutes,
-  },
-  {
-    path: '/stats',
-    route: statsRoutes,
-  },
-  {
-    path: '/featured',
-    route: featuredInRoutes,
-  },
-  {
-    path: '/notification',
-    route: notificationRoutes,
-  },
-  { path: '/website-content', route: websiteContentRoutes },
-  {
-    path: '/showcase',
-    route: showcaseWorkRoutes,
-  },
-  {
-    path: '/slots',
-    route: slotsRoutes,
-  },
-  {
-    path: '/team-member',
-    route: teamMemberRoutes,
-  },
-  {
-    path: '/feedback',
-    route: feedbackRoutes,
-  },
+  // {
+  //   path: '/specialization',
+  //   route: specializationRoutes,
+  // },
+  // {
+  //   path: '/service-team',
+  //   route: serviceTeamRoutes,
+  // },
+  // {
+  //   path: '/service',
+  //   route: serviceRoutes,
+  // },
+  // {
+  //   path: '/available-service',
+  //   route: availableServiceRoutes,
+  // },
+  // {
+  //   path: '/upcoming-service',
+  //   route: upcomingServiceRoutes,
+  // },
+  // {
+  //   path: '/booking',
+  //   route: bookingRoutes,
+  // },
+  // {
+  //   path: '/review-and-rating',
+  //   route: reviewAndRatingRoutes,
+  // },
+  // {
+  //   path: '/payment',
+  //   route: paymentRoutes,
+  // },
+  // {
+  //   path: '/blog',
+  //   route: blogPostRoutes,
+  // },
+  // {
+  //   path: '/faq',
+  //   route: faqRoutes,
+  // },
+  // {
+  //   path: '/stats',
+  //   route: statsRoutes,
+  // },
+  // {
+  //   path: '/featured',
+  //   route: featuredInRoutes,
+  // },
+  // {
+  //   path: '/notification',
+  //   route: notificationRoutes,
+  // },
+  // { path: '/website-content', route: websiteContentRoutes },
+  // {
+  //   path: '/showcase',
+  //   route: showcaseWorkRoutes,
+  // },
+  // {
+  //   path: '/slots',
+  //   route: slotsRoutes,
+  // },
+  // {
+  //   path: '/team-member',
+  //   route: teamMemberRoutes,
+  // },
+  // {
+  //   path: '/feedback',
+  //   route: feedbackRoutes,
+  // },
 ];
 
 // Application Routes

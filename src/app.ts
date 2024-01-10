@@ -10,8 +10,8 @@ const app: Application = express();
 // app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(
   cors({
-    origin: 'https://excellence-builders-frontend.vercel.app',
-    // origin: 'http://localhost:3000',
+    origin: 'http://localhost:3000',
+    // origin: 'https://review-web-inky.vercel.app',
     credentials: true,
   })
 );

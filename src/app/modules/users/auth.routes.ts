@@ -7,14 +7,14 @@ import { validationSchema } from './users.validation';
 const router = express.Router();
 
 router.post(
-  '/signup',
-  validateRequest(validationSchema.create),
+  '/signUp',
+  // validateRequest(validationSchema.create),
   UserController.insertIntoDB
 );
 
 router.post(
-  '/signin',
-  validateRequest(validationSchema.userLogin),
+  '/signIn',
+  // validateRequest(validationSchema.userLogin),
   UserController.signinUser
 );
 

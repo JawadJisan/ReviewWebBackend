@@ -86,8 +86,10 @@ exports.getAllBooking = (0, catchAsync_1.default)((req, res, next) => __awaiter(
     });
 }));
 exports.getSingleBooking = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers.authorization;
+    const verifiedUser = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
     const { id } = req.params;
-    const result = yield booking_service_1.BookingServices.getSingleBooking(id);
+    const result = yield booking_service_1.BookingServices.getSingleBooking(id, verifiedUser);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,

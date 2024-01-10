@@ -13,13 +13,14 @@ import { UsersServices } from './users.service';
 
 export const insertIntoDB: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
+  // console.log(data, 'consoledDATA');
   const result = await UsersServices.insertIntoDB(data);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     status: 'success',
-    message: 'User created successfully',
+    message: 'Yup! user created successfully!',
     data: result,
   });
 });
@@ -41,7 +42,7 @@ const signinUser: RequestHandler = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     status: 'success',
-    message: 'User logged in successfully',
+    message: 'Yup! User Entered!!',
     data: others,
   });
 });
@@ -74,14 +75,14 @@ export const getAllFromDB: RequestHandler = catchAsync(
     const result = await UsersServices.getAllFromDB(filters, paginationOptions);
 
     if (result.data.length === 0) {
-      return next(new ApiError('No users found!', httpStatus.NOT_FOUND));
+      return next(new ApiError('Opps! No User Found', httpStatus.NOT_FOUND));
     }
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       status: 'success',
-      message: 'Users retrived successfully',
+      message: 'Yup! You Got Users!',
       meta: result.meta,
       data: result.data,
     });
@@ -90,18 +91,16 @@ export const getAllFromDB: RequestHandler = catchAsync(
 
 const getDataById: RequestHandler = catchAsync(async (req, res, next) => {
   const result = await UsersServices.getDataById(req.params.id);
-
   if (!result) {
     return next(
       new ApiError(`No users found with this id`, httpStatus.NOT_FOUND)
     );
   }
-
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     status: 'success',
-    message: 'User retrived successfully',
+    message: 'Yup! You Got The User',
     data: result,
   });
 });
@@ -115,7 +114,7 @@ const updateDataById: RequestHandler = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     status: 'success',
-    message: 'User updated successfully',
+    message: 'Yup! User Data Updated Successfully!',
     data: result,
   });
 });
@@ -145,6 +144,8 @@ const getProfileData: RequestHandler = catchAsync(async (req, res) => {
     token as string,
     config.jwt.secret as string
   );
+
+  console.log(verifiedUser, 'verifiedUser');
 
   const result = await UsersServices.getProfileData(verifiedUser);
 
@@ -180,18 +181,6 @@ const updateProfileDataById: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
-const getTeamMember: RequestHandler = catchAsync(async (req, res) => {
-  const result = await UsersServices.getTeamMember();
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    status: 'success',
-    message: 'Team member retrived successfully',
-    data: result,
-  });
-});
-
 export const UserController = {
   insertIntoDB,
   signinUser,
@@ -202,5 +191,4 @@ export const UserController = {
   getProfileData,
   refreshToken,
   updateProfileDataById,
-  getTeamMember,
 };

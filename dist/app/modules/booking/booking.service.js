@@ -177,18 +177,35 @@ const getAllBooking = (options, verifiedUser) => __awaiter(void 0, void 0, void 
         data: result,
     };
 });
-const getSingleBooking = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.booking.findUnique({
-        where: {
-            id,
-        },
-        include: {
-            user: true,
-            slot: true,
-            service: true,
-            payment: true,
-        },
-    });
+const getSingleBooking = (id, verifiedUser) => __awaiter(void 0, void 0, void 0, function* () {
+    let result;
+    if (verifiedUser.role === client_1.UserRole.customer) {
+        result = yield prisma_1.default.booking.findUnique({
+            where: {
+                id,
+                userId: verifiedUser.userId,
+            },
+            include: {
+                user: true,
+                slot: true,
+                service: true,
+                payment: true,
+            },
+        });
+    }
+    else {
+        result = yield prisma_1.default.booking.findUnique({
+            where: {
+                id,
+            },
+            include: {
+                user: true,
+                slot: true,
+                service: true,
+                payment: true,
+            },
+        });
+    }
     return result;
 });
 const updateBooking = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {

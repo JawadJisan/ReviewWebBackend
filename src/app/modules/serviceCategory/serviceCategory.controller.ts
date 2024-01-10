@@ -6,17 +6,18 @@ import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
 import { serviceCategoryFilterableFields } from './serviceCategory.constant';
-import { ServiceCategoryServices } from './serviceCategory.service';
+import { reviewCategoryService } from './serviceCategory.service';
 
 export const insertIntoDB: RequestHandler = catchAsync(async (req, res) => {
   const data = req.body;
-  const result = await ServiceCategoryServices.insertIntoDB(data);
+  console.log(data, 'get body');
+  const result = await reviewCategoryService.insertIntoDB(data);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     status: 'success',
-    message: 'Service Team created successfully',
+    message: 'Yup! Review Service Category Created',
     data: result,
   });
 });
@@ -26,7 +27,7 @@ export const getAllFromDB: RequestHandler = catchAsync(
     const filters = pick(req.query, serviceCategoryFilterableFields);
     const paginationOptions = pick(req.query, paginationFields);
 
-    const result = await ServiceCategoryServices.getAllFromDB(
+    const result = await reviewCategoryService.getAllFromDB(
       filters,
       paginationOptions
     );
@@ -47,7 +48,7 @@ export const getAllFromDB: RequestHandler = catchAsync(
 );
 
 const getDataById: RequestHandler = catchAsync(async (req, res, next) => {
-  const result = await ServiceCategoryServices.getDataById(req.params.id);
+  const result = await reviewCategoryService.getDataById(req.params.id);
 
   if (!result) {
     return next(
@@ -70,7 +71,7 @@ const getDataById: RequestHandler = catchAsync(async (req, res, next) => {
 const updateDataById: RequestHandler = catchAsync(async (req, res, next) => {
   const payload = req.body;
 
-  const result = await ServiceCategoryServices.updateDataById(
+  const result = await reviewCategoryService.updateDataById(
     req.params.id,
     payload
   );
@@ -94,7 +95,7 @@ const updateDataById: RequestHandler = catchAsync(async (req, res, next) => {
 });
 
 const deleteDataById: RequestHandler = catchAsync(async (req, res, next) => {
-  const result = await ServiceCategoryServices.deleteDataById(req.params.id);
+  const result = await reviewCategoryService.deleteDataById(req.params.id);
 
   if (!result) {
     return next(
@@ -114,7 +115,7 @@ const deleteDataById: RequestHandler = catchAsync(async (req, res, next) => {
   });
 });
 
-export const ServiceCategoryController = {
+export const reviewCategoryController = {
   insertIntoDB,
   getAllFromDB,
   getDataById,

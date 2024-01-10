@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,384 +7,151 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
+model newUserModel {
+  id             String          @id @default(uuid())
+  createdAt      DateTime        @default(now()) @map("createdAt")
+  updatedAt      DateTime        @updatedAt @map("updatedAt")
+  firstName      String?
+  lastName       String?
+  email          String          @unique
+  userName       String          @unique
+  password       String
+  facebook       String?
+  twitter        String?
+  linkedIn       String?
+  other          String?
+  imageUrl       String?
+  address        String?
+  role           reviewUserRole  @default(user)
+  Review         Review[]
+  Comment        Comment[]
+  ContactDetails ContactDetails?
 
-  fullName         String
-  email            String            @unique
-  contactNumber    String
-  password         String
-  gender           Gender
-  profileImageUrl  String
-  address          String
-  role             UserRole          @default(customer)
-  teamMembers      TeamMember[]
-  bookings         Booking[]
-  reviewAndRatings ReviewAndRating[]
-  notifications    Notification[]
-  feedbacks        Feedback[]
-
-  @@map("users")
+  @@map("newUserModel")
 }
 
-model TeamMember {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  age        String
-  dob        String
-  experience String
-  history    String
-
-  userId String
-  user   Users  @relation(fields: [userId], references: [id])
-
-  specializationId String
-  specialization   Specialization @relation(fields: [specializationId], references: [id])
-
-  serviceTeamId String
-  serviceTeam   ServiceTeam @relation(fields: [serviceTeamId], references: [id])
-
-  @@unique([userId, serviceTeamId])
-  @@map("team_member")
-}
-
-model Specialization {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  title       String       @unique
+model Review {
+  id          String         @id @default(uuid())
+  title       String
   description String
-  teamMembers TeamMember[]
+  rating      Float
+  status      ListingStatus  @default(pending)
+  author      newUserModel   @relation(fields: [userId], references: [id])
+  userId      String
+  product     ListingProduct @relation(fields: [productId], references: [id])
+  productId   String
+  comments    Comment[]
+  other       Json?
 
-  @@map("specialization")
-}
-
-model ServiceTeam {
-  id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("createdAt")
   updatedAt DateTime @updatedAt @map("updatedAt")
-
-  teamName String @unique
-
-  teamMembers       TeamMember[]
-  serviceSchedule   Slot[]
-  teamNotifications TeamNotification[]
-
-  @@map("service_team")
+  // reviewUsers   reviewUsers? @relation(fields: [reviewUsersId], references: [id])
+  // reviewUsersId String?
 }
 
-model ServiceCategory {
-  id        String   @id @default(uuid())
+model Comment {
+  id               String          @id @default(uuid())
+  comment          String
+  author           newUserModel    @relation(fields: [userId], references: [id])
+  userId           String
+  review           Review          @relation(fields: [reviewId], references: [id])
+  reviewId         String
+  // reviewUsers      reviewUsers?    @relation(fields: [reviewUsersId], references: [id])
+  // reviewUsersId    String?
+  ListingProduct   ListingProduct? @relation(fields: [listingProductId], references: [id])
+  listingProductId String?
+}
+
+// reviewWeb
+model ListingProduct {
+  id          String        @id @default(uuid())
+  featured    Boolean       @default(false)
+  title       String
+  price       String
+  amenities   String[]
+  parking     String
+  management  String
+  description String
+  tags        String[]
+  images      String[]
+  status      ListingStatus @default(pending)
+  category    String
+  videoURL    String?
+  authorID    String?
+
+  state    String?
+  zipCode  String?
+  email    String?
+  address  String?
+  phone    String?
+  website  String?
+  facebook String?
+  twitter  String?
+  gitHub   String?
+
+  reviews  Review[]
+  comments Comment[]
+
   createdAt DateTime @default(now()) @map("createdAt")
   updatedAt DateTime @updatedAt @map("updatedAt")
+}
 
-  categoryName  String     @unique
+model ContactDetails {
+  id       String       @id @default(uuid())
+  state    String
+  zipCode  String
+  email    String
+  address  String
+  phone    String
+  website  String
+  facebook String
+  twitter  String
+  gitHub   String
+  userId   String       @unique
+  user     newUserModel @relation(fields: [userId], references: [id])
+}
+
+enum ListingStatus {
+  pending
+  approved
+  rejected
+}
+
+model reviewCategory {
+  id            String   @id @default(uuid())
+  createdAt     DateTime @default(now()) @map("createdAt")
+  updatedAt     DateTime @updatedAt @map("updatedAt")
+  categoryName  String   @unique
   description   String?
-  categoryImage String
-  services      Service[]
-  blogPosts     BlogPost[]
+  categoryImage String?
 
-  @@map("service_category")
+  @@map("reviewCategory")
 }
 
-model Service {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  serviceName String @unique
-  description String
-  price       Float
-  imageUrl    String
-
-  serviceCategoryId String
-  serviceCategory   ServiceCategory    @relation(fields: [serviceCategoryId], references: [id])
-  availableServices AvailableService[]
-  upcomingServices  UpcomingService[]
-
-  @@map("service")
+// reviewWeb
+enum reviewUserRole {
+  user
+  admin
+  editor
+  moderator
 }
 
-model AvailableService {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  isFeatured  Boolean @default(false)
-  isAvailable Boolean @default(true)
-
-  totalServiceProvided Int @default(100)
-
-  categoryId  String?
-  price       Float?
-  serviceName String?
-
-  serviceId String
-  service   Service @relation(fields: [serviceId], references: [id])
-
-  bookings         Booking[]
-  reviewAndRatings ReviewAndRating[]
-  stat             Stats?
-  showcaseWorks    ShowcaseWork[]
-  slots            Slot[]
-
-  @@map("available_sevice")
-}
-
-model UpcomingService {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  serviceId String
-  service   Service @relation(fields: [serviceId], references: [id])
-
-  status Boolean @default(true)
-
-  @@map("upcoming_service")
-}
-
-model Slot {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  startTime String
-
-  serviceTeamId String
-  serviceTeam   ServiceTeam @relation(fields: [serviceTeamId], references: [id])
-
-  availableServiceId String
-  availableService   AvailableService @relation(fields: [availableServiceId], references: [id])
-  bookings           Booking[]
-
-  @@unique([startTime, serviceTeamId, availableServiceId])
-  @@map("slot")
-}
-
-model Booking {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  date    String
-  weekDay String?
-  time    String?
-  status  BookingStatus @default(pending)
-
-  userId String
-  user   Users  @relation(fields: [userId], references: [id])
-
-  slotId String
-  slot   Slot   @relation(fields: [slotId], references: [id])
-
-  serviceId String
-  service   AvailableService @relation(fields: [serviceId], references: [id])
-  payment   Payment?
-
-  @@unique([userId, date, serviceId])
-  @@map("booking")
-}
-
-model Payment {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  paymentStatus PaymentStatus @default(notPaid)
-  paymentDate   String?
-  paymentMethod PaymentMethod
-  transactionId String?
-
-  bookingId String  @unique
-  booking   Booking @relation(fields: [bookingId], references: [id])
-
-  @@map("payment")
-}
-
-model ReviewAndRating {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  userId String
-  user   Users  @relation(fields: [userId], references: [id])
-
-  serviceId String
-  service   AvailableService @relation(fields: [serviceId], references: [id])
-
-  rating Int
-  review String
-
-  @@map("review_and_rating")
-}
-
-model Feedback {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  comment String
-  userId  String
-  user    Users  @relation(fields: [userId], references: [id])
-
-  @@map("feedback")
-}
-
-model BlogPost {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  title      String
-  authorName String
-  imageUrl   String?
-  blogLink   String
-
-  categoryId      String
-  serviceCategory ServiceCategory @relation(fields: [categoryId], references: [id])
-
-  @@map("blog_post")
-}
-
-model Faq {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  question String
-  answer   String
-
-  @@map("faq")
-}
-
-model Stats {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  bestSellingServiceId String           @unique
-  bestSellingService   AvailableService @relation(fields: [bestSellingServiceId], references: [id])
-  totalClient          Int
-  totalServiceProvided Int              @default(1000)
-  totalServices        Int?             @default(25)
-
-  @@map("stats")
-}
-
-model FeatuedIn {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  title    String
-  imageUrl String?
-  siteLink String?
-
-  @@map("featured_in")
-}
-
-model Notification {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  userId String
-  user   Users  @relation(fields: [userId], references: [id])
-
-  readStatus Boolean            @default(false)
-  message    String
-  type       NotificationStatus
-
-  @@map("notification")
-}
-
-model TeamNotification {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  teamId String
-  team   ServiceTeam @relation(fields: [teamId], references: [id])
-
-  readStatus Boolean            @default(false)
-  message    String
-  type       NotificationStatus
-
-  @@map("team_notification")
-}
-
-model WebsiteContent {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  aboutUsText      String?
-  aboutUsImage     String?
-  ceoStatement     String?
-  ceoName          String?
-  ceoImage         String?
-  companyAddress   String?
-  companyContactNo String?
-  companyEmail     String?
-  footerText       String?
-
-  @@map("website_content")
-}
-
-model WesiteBannerContent {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  headingOne    String?
-  subHeadingOne String?
-  imageUrlOne   String?
-
-  headingTwo    String?
-  subHeadingTwo String?
-  imageUrlTwo   String?
-
-  headingThree    String?
-  subHeadingThree String?
-  imageUrlThree   String?
-
-  @@map("website_header_content")
-}
-
-model PrivacyPolicy {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  policyName String
-
-  @@map("privacy_policy")
-}
-
-model ShowcaseWork {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("createdAt")
-  updatedAt DateTime @updatedAt @map("updatedAt")
-
-  serviceId String
-  service   AvailableService @relation(fields: [serviceId], references: [id])
-
-  imageUrl    String
-  description String
-
-  @@map("showcase_work")
-}
+// model ReviewAndRating {
+//   id        String   @id @default(uuid())
+//   createdAt DateTime @default(now()) @map("createdAt")
+//   updatedAt DateTime @updatedAt @map("updatedAt")
+//   userId String
+//   user   Users  @relation(fields: [userId], references: [id])
+//   serviceId String
+//   service   AvailableService @relation(fields: [serviceId], references: [id])
+//   rating Int
+//   review String
+//   @@map("review_and_rating")
+// }
 
 enum Gender {
   male
   female
-  others
 }
 
 enum UserRole {

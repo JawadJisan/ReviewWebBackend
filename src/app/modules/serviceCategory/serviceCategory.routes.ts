@@ -1,42 +1,23 @@
 import express from 'express';
-import { ENUM_USER_ROLE } from '../../../enums/user';
-import auth from '../../middlewares/auth';
-import { validateRequest } from '../../middlewares/validateRequest';
-import { ServiceCategoryController } from './serviceCategory.controller';
-import { validationSchema } from './serviceCategory.validation';
+import { reviewCategoryController } from './serviceCategory.controller';
 
 const router = express.Router();
 
-router.get(
-  '/:id',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  ServiceCategoryController.getDataById
-);
+router.get('/:id', reviewCategoryController.getDataById);
 
-router.delete(
-  '/:id',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  ServiceCategoryController.deleteDataById
-);
+router.delete('/:id', reviewCategoryController.deleteDataById);
 
 router.patch(
   '/:id',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  validateRequest(validationSchema.update),
-  ServiceCategoryController.updateDataById
+  // validateRequest(validationSchema.update),
+  reviewCategoryController.updateDataById
 );
-
 router.post(
   '/',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  validateRequest(validationSchema.create),
-  ServiceCategoryController.insertIntoDB
+  // validateRequest(validationSchema.create),
+  reviewCategoryController.insertIntoDB
 );
 
-router.get(
-  '/',
+router.get('/', reviewCategoryController.getAllFromDB);
 
-  ServiceCategoryController.getAllFromDB
-);
-
-export const serviceCategoryRoutes = router;
+export const reviewCategoryRoute = router;

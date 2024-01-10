@@ -25,6 +25,7 @@ const auth_routes_1 = require("../modules/users/auth.routes");
 const profile_routes_1 = require("../modules/users/profile.routes");
 const users_routes_1 = require("../modules/users/users.routes");
 const websiteContent_routes_1 = require("../modules/websiteContent/websiteContent.routes");
+const payment_routes_1 = require("../modules/payment/payment.routes");
 const router = express_1.default.Router();
 const moduleRoutes = [
     {
@@ -70,6 +71,10 @@ const moduleRoutes = [
     {
         path: '/review-and-rating',
         route: reviewAndRating_routes_1.reviewAndRatingRoutes,
+    },
+    {
+        path: '/payment',
+        route: payment_routes_1.paymentRoutes,
     },
     {
         path: '/blog',

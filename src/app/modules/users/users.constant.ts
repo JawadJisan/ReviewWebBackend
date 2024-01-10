@@ -1,6 +1,6 @@
 import { Gender, UserRole } from '@prisma/client';
 
-export const gender: Gender[] = ['male', 'female', 'others'];
+export const gender: Gender[] = ['male', 'female'];
 export const userRole: UserRole[] = [
   'admin',
   'customer',
@@ -12,6 +12,7 @@ export const userFilterableFields: string[] = [
   'searchTerm',
   'fullName',
   'email',
+  'userName',
   'role',
   'gender',
 ];

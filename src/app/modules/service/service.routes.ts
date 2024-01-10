@@ -25,7 +25,7 @@ router.patch(
 
 router.post(
   '/',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   validateRequest(validationSchema.create),
   ServiceController.insertIntoDB
 );

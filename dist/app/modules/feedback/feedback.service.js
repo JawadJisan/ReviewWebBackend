@@ -21,7 +21,11 @@ const insertIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getAllFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.feedback.findMany();
+    const result = yield prisma_1.default.feedback.findMany({
+        include: {
+            user: true,
+        },
+    });
     return result;
 });
 const getDataById = (id) => __awaiter(void 0, void 0, void 0, function* () {

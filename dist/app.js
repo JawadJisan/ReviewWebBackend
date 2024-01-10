@@ -23,6 +23,7 @@ const app = (0, express_1.default)();
 // app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use((0, cors_1.default)({
     origin: 'https://excellence-builders-frontend.vercel.app',
+    // origin: 'http://localhost:3000',
     credentials: true,
 }));
 //parser
@@ -46,6 +47,7 @@ app.get('*', (req, res, next) => {
     ];
     next(new ApiError_1.default(message, http_status_1.default.NOT_FOUND, errorObjs));
 });
+// global error handaler
 // global error handaler
 app.use(globalErrorHandler_1.default);
 exports.default = app;
